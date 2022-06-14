@@ -1,4 +1,4 @@
-# Scrapy settings for batdongsanvn project
+# Scrapy settings for batdongsan project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,20 +7,20 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'batdongsanvn'
+BOT_NAME = 'batdongsan'
 
-SPIDER_MODULES = ['batdongsanvn.spiders']
-NEWSPIDER_MODULE = 'batdongsanvn.spiders'
+SPIDER_MODULES = ['batdongsan.spiders']
+NEWSPIDER_MODULE = 'batdongsan.spiders'
+
 FEED_EXPORT_ENCODING = 'utf-8'
-MONGO_URI = 'mongodb+srv://root:123@cluster0.wnpz9.mongodb.net/RealEstate?retryWrites=true&w=majority'
+MONGO_URI = 'mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/?retryWrites=true&w=majority'
 MONGO_DATABASE = 'RealEstate'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'batdongsanvn (+http://www.yourdomain.com)'
+#USER_AGENT = 'batdongsan (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -51,13 +51,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'batdongsanvn.middlewares.BatdongsanvnSpiderMiddleware': 543,
+#    'batdongsan.middlewares.BatdongsanSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'batdongsanvn.middlewares.BatdongsanvnDownloaderMiddleware': 543,
+#    'batdongsan.middlewares.BatdongsanDownloaderMiddleware': 543,
 # }
 
 # Enable or disable extensions
@@ -69,7 +69,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'batdongsanvn.pipelines.BatdongsanvnPipeline': 300,
+#    'batdongsan.pipelines.BatdongsanPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -1,7 +1,7 @@
 # DataBase Item BDS
 
 class BDSDatabaseConfig:
-    MONGO_URI = "mongodb+srv://root:123@cluster0.wnpz9.mongodb.net/PropertiesDatabase?retryWrites=true&w=majority"
+    MONGO_URI = "mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/PropertiesDatabase?retryWrites=true&w=majority"
     DATABASE_NAME = 'PropertiesDatabase'
     COLLECTION_BDS_NAME = 'MediatedCleanData'
 
@@ -23,17 +23,18 @@ class BDSDatabaseConfig:
 
 
 class StatisticDatabaseConfig:
-    MONGO_URI = 'mongodb+srv://root:123@cluster0.wnpz9.mongodb.net/StatDatabase?retryWrites=true&w=majority'
+    MONGO_URI = 'mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/StatDatabase?retryWrites=true&w=majority'
     DATABASE_NAME = 'StatDatabase'
     COLLECTION_TOTAL_PRICE_ON_CITY = 'TotalPriceOnCity'
     COLLECTION_TOTAL_PRICE_ON_DISTRICT = 'TotalPriceOnDistrict'
     COLLECTION_TOTAL_PRICE_ON_WARD = 'TotalPriceOnWard'
+    COLLECTION_DENSITY_ON_CITY = 'TotalDensityOnCity'
     COLLECTION_DENSITY_ON_DISTRICT = 'TotalDensityOnDistrict'
     COLLECTION_DENSITY_ON_WARD = 'TotalDensityOnWard'
 
 
 class UserDatabaseConfig:
-    MONGO_URI = "mongodb+srv://root:123@cluster0.wnpz9.mongodb.net/UserDatabase?retryWrites=true&w=majority"
+    MONGO_URI = "mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/UserDatabase?retryWrites=true&w=majority"
     DATABASE_NAME = "UserDatabase"
     COLLECTION_ACCOUNT = "Account"
     COLLECTION_LOG = "Log"
