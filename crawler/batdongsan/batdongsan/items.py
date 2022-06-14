@@ -10,6 +10,7 @@ from scrapy.item import Item, Field
 class BatdongsanVnItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    url = Field()
     title = Field()
     postedTime = Field()
     description = Field()
@@ -20,6 +21,8 @@ class BatdongsanVnItem(scrapy.Item):
     legally = Field()
 
     address = Field()
+    city = Field()
+    district = Field()
 
     numOfBedrooms = Field()  # optional
     numOfToilets = Field()  # optional

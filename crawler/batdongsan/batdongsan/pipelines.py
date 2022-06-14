@@ -11,9 +11,9 @@ from itemadapter import ItemAdapter
 from datetime import datetime, timedelta
 
 
-class AlonhadatComVnPipeline:
+class BatdongsanVnPipeline:
 
-    collection_name = 'HouseAlonhadat.com.vn'
+    collection_name = 'RawBatdongsan.vn'
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -34,16 +34,7 @@ class AlonhadatComVnPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
-        item['postedTime'] = item['postedTime'].replace(
-            'Ngày đăng:', '').strip()
-
-        if (item['postedTime'] == 'Hôm nay'):
-            item['postedTime'] = datetime.today().strftime("%d/%m/%Y")
-
-        if (item['postedTime'] == 'Hôm qua'):
-            item['postedTime'] = (
-                datetime.today() - timedelta(days=1)).strftime("%d/%m/%Y")
-
+        # print(item['image'])
         if (item['square'] != 'UNKNOW' and item['square'] != ''):
             item['square'] = float(
                 item['square'].replace('m', '').replace(',', '.'))
@@ -56,36 +47,6 @@ class AlonhadatComVnPipeline:
                 ' ')[0].strip()) * float(item['square'])
         else:
             item['price'] = float(item['price'].split(' ')[0].strip())
-
-        if item['direction'] == '_':
-            item['direction'] = 'UNKONW'
-        if item['dinningRoom'] == '---':
-            item['dinningRoom'] = 0
-        else:
-            item['dinningRoom'] = 1
-
-        if item['kitchen'] == '---':
-            item['kitchen'] = 0
-        else:
-            item['kitchen'] = 1
-
-        if item['rooftop'] == '---':
-            item['rooftop'] = 0
-        else:
-            item['rooftop'] = 1
-
-        if item['garage'] == '---':
-            item['garage'] = 0
-        else:
-            item['garage'] = 1
-
-        if item['proprietor'] == '---':
-            item['proprietor'] = 0
-        else:
-            item['proprietor'] = 1
-
-        if item['legally'] == '---':
-            item['legally'] = 'UNKNOW'
 
         self.db[self.collection_name].insert_one(ItemAdapter(item).asdict())
 

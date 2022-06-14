@@ -9,7 +9,7 @@ from scrapy.http import HtmlResponse
 class BatdongsanVnSpider(scrapy.Spider):
     name = 'batdongsan_vn'
     allowed_domains = ['batdongsan.vn']
-    start_urls = ['https://batdongsan.vn/ban-nha']
+    start_urls = ['https://batdongsan.vn/ban-nha-dat']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 1000,
@@ -66,9 +66,9 @@ class BatdongsanVnSpider(scrapy.Spider):
 
         legally = 'UNKNOW'
         if (description.lower().strip().find('sổ hồng') >= 0):
-            legally = 'sổ hồng'
+            legally = 'sổ đỏ/sổ hồng'
         if (description.lower().strip().find('sổ đỏ') >= 0):
-            legally = 'sổ hồng'
+            legally = 'sổ đỏ/sổ hồng'
         item_loader.add_value('legally', legally)
 
         price = response.css("strong.price::text").getall()
@@ -108,10 +108,16 @@ class BatdongsanVnSpider(scrapy.Spider):
         item_loader.add_value('phone', phone)
 
         image = response.css('div.image.cover > a>img::attr(src)').getall()
-        item_loader.add_value('image', image)
-
-        type = 'house'
+        # print(image)
+        item_loader.add_value('image', [image])
+        breadcrumb = response.css('ul.uk-breadcrumb > li>a::text').getall()
+        # print(breadcrumb)
+        type = breadcrumb[1]
         item_loader.add_value('type', type)
+        city = breadcrumb[2]
+        item_loader.add_value('city', city)
+        district = breadcrumb[3]
+        item_loader.add_value('district', district)
         item_loader.add_value('url', response.request.url)
 
         return item_loader.load_item()
