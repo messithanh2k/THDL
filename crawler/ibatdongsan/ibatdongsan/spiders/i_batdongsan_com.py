@@ -3,14 +3,14 @@ import logging
 from scrapy.loader import ItemLoader
 from scrapy import Selector
 from itemloaders.processors import TakeFirst
-from alonhadat.items import AlonhadatComVnItem
+from ibatdongsan.items import IbatdongsanComItem
 from scrapy.http import HtmlResponse
 
 
-class AlonhadatComVnSpider(scrapy.Spider):
-    name = 'alonhadat_com_vn'
-    allowed_domains = ['alonhadat.com.vn']
-    start_urls = ['https://alonhadat.com.vn/nha-dat/can-ban.html']
+class IBatdongsanComSpider(scrapy.Spider):
+    name = 'i-batdongsan_com'
+    allowed_domains = ['i-batdongsan.com']
+    start_urls = ['http://i-batdongsan.com/can-ban-nha-dat.htm']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 300,
@@ -19,7 +19,7 @@ class AlonhadatComVnSpider(scrapy.Spider):
 
     custom_settings = {
         'ITEM_PIPELINES': {
-            'alonhadat.pipelines.AlonhadatComVnPipeline': 300
+            'ibatdongsan.pipelines.IbatdongsanComPipeline': 300
         }
     }
 
@@ -41,39 +41,33 @@ class AlonhadatComVnSpider(scrapy.Spider):
             yield scrapy.Request(url, headers=headers)
 
     def parse(self, response, **kwargs):
-        list_post = response.css("div .ct_title > a")
+        list_post = response.css("div.ct_title > a")
         # print(list_post)
         for post in list_post:
-            url = 'https://alonhadat.com.vn/'+post.attrib['href']
+            url = 'http://i-batdongsan.com/'+post.attrib['href']
             yield scrapy.Request(url=url, callback=self.parse_item)
 
         # For next page
-        next_page = 'https://alonhadat.com.vn/' + \
+        next_page = 'http://i-batdongsan.com/' + \
             response.css('div.page > a.active + a').attrib['href']
         yield scrapy.Request(url=next_page, callback=self.parse)
 
     def parse_item(self, response, **kwargs):
 
-        item_loader = ItemLoader(item=AlonhadatComVnItem(), response=response)
+        item_loader = ItemLoader(item=IbatdongsanComItem(), response=response)
         item_loader.default_output_processor = TakeFirst()
         # Item
 
         title = response.css("h1::text").get()
         # print(title)
         item_loader.add_value('title', title.strip())
-        time = response.css('span.date::text').get()
-        item_loader.add_value('postedTime', time)
-
-        price = response.css("span.price>span.value::text").get()
-        # print(price)
-        item_loader.add_value('price', price.strip())
-        square = response.css("span.square>span.value::text").get()
-        # print(square)
-        item_loader.add_value('square', square.strip())
 
         address = response.css("div.address>span.value::text").get()
         # print(address)
         item_loader.add_value('address', address.strip())
+        price = response.css("td.price::text").get()
+        # print(price)
+        item_loader.add_value('price', price.strip())
 
         prarams = response.css('td').getall()
         # print(prarams)
@@ -81,6 +75,16 @@ class AlonhadatComVnSpider(scrapy.Spider):
             item = prarams[i]
             item = item.replace('<td>', '')
             item = item.replace('</td>', '')
+            if (item == 'Ngày đăng'):
+                time = prarams[i +
+                               1].replace('<td colspan="5">', '').replace('</td>', '').strip()
+                # print(direction)
+                item_loader.add_value('postedTime', time)
+            if (item == 'Diện tích'):
+                square = prarams[i +
+                                 1].split('<sup>')[0].replace('<td>', '').replace('"', '').strip()
+                # print(square)
+                item_loader.add_value('square', square.strip())
             if (item == 'Hướng'):
                 direction = prarams[i +
                                     1].replace('<td>', '').replace('</td>', '').strip()
@@ -96,7 +100,7 @@ class AlonhadatComVnSpider(scrapy.Spider):
                 type = prarams[i+1].replace('<td>',
                                             '').replace('</td>', '').strip()
                 item_loader.add_value('type', type)
-            if (item == 'Đường trước nhà'):
+            if (item == 'Lộ giới'):
                 houseRoad = prarams[i +
                                     1].replace('<td>', '').replace('</td>', '').strip()
                 item_loader.add_value('houseRoad', houseRoad)
@@ -153,29 +157,12 @@ class AlonhadatComVnSpider(scrapy.Spider):
 
         district = breadcrumb[4].replace(breadcrumb[2], '').strip()
         item_loader.add_value('district', district)
-        description = ''
-        ptag = response.css('div.detail span::text').getall()
-        if len(ptag) > 0:
-            # print(ptag)
-            for i in ptag:
-                description = description+"\n"+i
-                images = response.css(
-                    'div.detail img').xpath('@src').getall()
-        else:
-            ptag = response.css('div.detail p::text').getall()
-            if len(ptag) > 0:
-                # print(ptag)
-                for i in ptag:
-                    description = description+"\n"+i
-                    images = response.css(
-                        'div.detail img').xpath('@src').getall()
-            else:
-                description = response.css('div.detail::text').getall()
+        description = response.css('div.detail::text').getall()
 
-                # print(description)
-                images = response.css(
-                    'div.image-list >span>img').xpath('@src').getall()
-                # print(images)
+        # print(description)
+        images = response.css(
+            'div.image-list >ul>li>img').xpath('@src').getall()
+        # print(images)
 
         if (len(images) == 0):
             images = response.css(
@@ -185,7 +172,7 @@ class AlonhadatComVnSpider(scrapy.Spider):
         item_loader.add_value('description', description)
         image = []
         for item in images:
-            image.append('https://alonhadat.com.vn/' + item)
+            image.append('http://i-batdongsan.com/' + item)
 
         item_loader.add_value('image', [image])
 
