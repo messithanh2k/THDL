@@ -80,6 +80,9 @@ class BatdongsanVnSpider(scrapy.Spider):
                 url=item, body=item, encoding='utf-8')
             key = converted_item.css('strong::text').get()
             value = converted_item.css('li::text').get()
+            if (key == 'Mã tin:'):
+                id = value.strip()
+                item_loader.add_value('id', id)
             if (key == 'Diện tích:'):
                 square = value.strip()
                 item_loader.add_value('square', square.strip())

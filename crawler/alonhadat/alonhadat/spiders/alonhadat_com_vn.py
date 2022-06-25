@@ -52,17 +52,27 @@ class AlonhadatComVnSpider(scrapy.Spider):
             response.css('div.page > a.active + a').attrib['href']
         yield scrapy.Request(url=next_page, callback=self.parse)
 
+    def parse_phone(self, response, **kwargs):
+        loader_next = ItemLoader(item=response.meta['item'], response=response)
+        phone = response.css(
+            'div.agent-infor div.phone a').xpath('@href').get().replace('tel:', '')
+        loader_next.add_value('phone', phone)
+        return loader_next.load_item()
+
     def parse_item(self, response, **kwargs):
 
         item_loader = ItemLoader(item=AlonhadatComVnItem(), response=response)
         item_loader.default_output_processor = TakeFirst()
         # Item
+        user_info = 'https://alonhadat.com.vn/' + \
+            response.css('div.contact div.view-more>a').xpath('@href').get()
+        # print(user_info)
 
         title = response.css("h1::text").get()
         # print(title)
         item_loader.add_value('title', title.strip())
         time = response.css('span.date::text').get()
-        item_loader.add_value('postedTime', time)
+        item_loader.add_value('postedTime', time.strip())
 
         price = response.css("span.price>span.value::text").get()
         # print(price)
@@ -81,6 +91,11 @@ class AlonhadatComVnSpider(scrapy.Spider):
             item = prarams[i]
             item = item.replace('<td>', '')
             item = item.replace('</td>', '')
+            if (item == 'Mã tin'):
+                id = prarams[i +
+                             1].replace('<td>', '').replace('</td>', '').strip()
+                item_loader.add_value('id', id.strip())
+
             if (item == 'Hướng'):
                 direction = prarams[i +
                                     1].replace('<td>', '').replace('</td>', '').strip()
@@ -140,11 +155,8 @@ class AlonhadatComVnSpider(scrapy.Spider):
         author = response.css(
             'div.contact-info > div.content > div.name::text').get()
         item_loader.add_value('seller', author)
-        email = 'UNKNOW'
+        email = '---'
         item_loader.add_value('email', email)
-        phone = response.css(
-            'div.contact-info > div.content > div.fone >a').attrib['href']
-        item_loader.add_value('phone', phone.replace('tel:', ''))
 
         breadcrumb = response.css('div.top-link>span>a>span::text').getall()
 
@@ -190,5 +202,8 @@ class AlonhadatComVnSpider(scrapy.Spider):
         item_loader.add_value('image', [image])
 
         item_loader.add_value('url', response.request.url)
+
+        yield scrapy.Request(url=user_info, callback=self.parse_phone,  meta={'item': item_loader.load_item()},
+                             dont_filter=True)
 
         return item_loader.load_item()

@@ -1,3 +1,4 @@
+from scipy.fftpack import idct
 import scrapy
 import logging
 from scrapy.loader import ItemLoader
@@ -75,6 +76,7 @@ class IBatdongsanComSpider(scrapy.Spider):
             item = prarams[i]
             item = item.replace('<td>', '')
             item = item.replace('</td>', '')
+
             if (item == 'Ngày đăng'):
                 time = prarams[i +
                                1].replace('<td colspan="5">', '').replace('</td>', '').strip()
@@ -85,6 +87,11 @@ class IBatdongsanComSpider(scrapy.Spider):
                                  1].split('<sup>')[0].replace('<td>', '').replace('"', '').strip()
                 # print(square)
                 item_loader.add_value('square', square.strip())
+            if (item == 'Mã tin'):
+                id = prarams[i +
+                             1].replace('<td>', '').replace('</td>', '').strip()
+                # print(direction)
+                item_loader.add_value('id', id.strip())
             if (item == 'Hướng'):
                 direction = prarams[i +
                                     1].replace('<td>', '').replace('</td>', '').strip()

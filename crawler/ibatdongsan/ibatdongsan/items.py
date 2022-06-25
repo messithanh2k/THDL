@@ -9,6 +9,7 @@ from scrapy.item import Item, Field
 
 class IbatdongsanComItem(scrapy.Item):
     url = Field()
+    id = Field()
     title = Field()
     postedTime = Field()
     description = Field()

@@ -10,6 +10,7 @@ class AlonhadatComVnItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     url = Field()
+    id = Field()
     title = Field()
     postedTime = Field()
     description = Field()
