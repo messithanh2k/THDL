@@ -10,7 +10,7 @@ from scrapy.http import HtmlResponse
 class AlomuabannhadatVnSpider(scrapy.Spider):
     name = 'alomuabannhadat_vn'
     allowed_domains = ['alomuabannhadat.vn']
-    start_urls = ['https://alomuabannhadat.vn/nha-ban/']
+    start_urls = ['https://alomuabannhadat.vn/dat-ban-tai-ha-noi/']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 300,
@@ -59,6 +59,9 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
         item_loader = ItemLoader(
             item=AlomuabannhadatVnItem(), response=response)
         item_loader.default_output_processor = TakeFirst()
+        
+        for field in item.fields:
+            item.setdefault(field, '---')
         # Item
 
         title = response.css("h1::text").get()
@@ -93,19 +96,19 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
                 address = value.strip()
                 item_loader.add_value('address', address)
 
-            if (item == 'Pháp lý'):
+            if (item == 'Pháp lý:'):
                 legally = value.strip()
                 item_loader.add_value('legally', legally)
 
-            if (item == 'Liên hệ'):
+            if (item == 'Liên hệ:'):
                 author = value.strip()
                 item_loader.add_value('seller', author)
 
-            if (item == 'Ngày đăng'):
+            if (item == 'Ngày đăng:'):
                 time = value.strip()
                 # print(direction)
                 item_loader.add_value('postedTime', time)
-            if (item == 'Mobile'):
+            if (item == 'Mobile:'):
                 phone = value.split("')")[0].split("this,'")[1].strip()
                 item_loader.add_value('phone', phone)
 
@@ -133,15 +136,15 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
                 numOfLivingrooms = item.replace('Số phòng khách:', '').strip()
                 item_loader.add_value('numOfLivingrooms', numOfLivingrooms)
 
-            if (item.find('nhà bếp') >= 0):
+            if (item.lower().find('nhà bếp') >= 0):
                 kitchen = 1
                 item_loader.add_value('kitchen', kitchen)
 
-            if (item.find('phòng ăn') >= 0):
+            if (item.lower().find('phòng ăn') >= 0):
                 dinningRoom = 1
                 item_loader.add_value('dinningRoom', dinningRoom)
 
-            if (item.find('Sân thượng') >= 0):
+            if (item.lower().find('sân thượng') >= 0):
                 rooftop = 1
                 item_loader.add_value('rooftop', rooftop)
 
@@ -157,15 +160,15 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
                 numOfFloors = item.replace('Số lầu:', '').strip()
                 item_loader.add_value('numOfFloors', numOfFloors)
 
-            if (item.find('Chổ đậu xe hơi') >= 0):
+            if (item.lower().find('chổ đậu xe hơi') >= 0):
                 garage = 1
                 item_loader.add_value('garage', garage)
 
-            if (item.find('Sân vườn') >= 0):
+            if (item.lower().find('sân vườn') >= 0):
                 garden = 1
                 item_loader.add_value('garden', garden)
 
-            if (item.find('Hồ bơi') >= 0):
+            if (item.lower().find('hồ bơi') >= 0):
                 pool = 1
                 item_loader.add_value('pool', pool)
 
@@ -173,7 +176,7 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
                 numOfBedrooms = item.replace('Số phòng ngủ:', '').strip()
                 item_loader.add_value('numOfBedrooms', numOfBedrooms)
 
-            if (item.find('Số phòng vệ sinh:')):
+            if (item.find('Số phòng vệ sinh:') >= 0):
                 numOfToilets = item.replace('Số phòng vệ sinh:', '').strip()
                 item_loader.add_value('numOfToilets', numOfToilets)
 
