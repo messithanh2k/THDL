@@ -9,7 +9,7 @@ from scrapy.http import HtmlResponse
 class BatdongsanVnSpider(scrapy.Spider):
     name = 'batdongsan_vn'
     allowed_domains = ['batdongsan.vn']
-    start_urls = ['https://batdongsan.vn/ban-nha-dat']
+    start_urls = ['https://batdongsan.vn/ban-nha-dat-ha-noi']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 1000,
@@ -79,10 +79,11 @@ class BatdongsanVnSpider(scrapy.Spider):
             converted_item = HtmlResponse(
                 url=item, body=item, encoding='utf-8')
             key = converted_item.css('strong::text').get()
-            value = converted_item.css('li::text').get()
             if (key == 'Mã tin:'):
-                id = value.strip()
+                id = converted_item.css('li>span::text').get()
                 item_loader.add_value('id', id)
+
+            value = converted_item.css('li::text').get()
             if (key == 'Diện tích:'):
                 square = value.strip()
                 item_loader.add_value('square', square.strip())

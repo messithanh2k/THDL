@@ -1,4 +1,3 @@
-from scipy.fftpack import idct
 import scrapy
 import logging
 from scrapy.loader import ItemLoader
@@ -11,7 +10,7 @@ from scrapy.http import HtmlResponse
 class IBatdongsanComSpider(scrapy.Spider):
     name = 'i-batdongsan_com'
     allowed_domains = ['i-batdongsan.com']
-    start_urls = ['http://i-batdongsan.com/can-ban-nha-dat.htm']
+    start_urls = ['http://i-batdongsan.com/can-ban-nha-dat/ha-noi-t1.htm']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 300,
