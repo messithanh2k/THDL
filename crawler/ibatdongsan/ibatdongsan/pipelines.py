@@ -33,6 +33,9 @@ class IbatdongsanComPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
+        for field in item.fields:
+            item.setdefault(field, '---')
+
         item['postedTime'] = item['postedTime'].replace(
             'Ngày đăng:', '').strip()
 
@@ -43,48 +46,23 @@ class IbatdongsanComPipeline:
             item['postedTime'] = (
                 datetime.today() - timedelta(days=1)).strftime("%d/%m/%Y")
 
-        if (item['square'] != 'UNKNOW' and item['square'] != ''):
-            item['square'] = float(
-                item['square'].replace('m', '').replace(',', '.'))
-
-        if ('tỷ' in item['price'].lower()):
-            item['price'] = float(item['price'].split(
-                ' ')[0].strip().replace(',', '.')) * 1000
-        elif 'triệu/' in item['price'].lower().strip():
-            item['price'] = float(item['price'].split(
-                ' ')[0].strip().replace(',', '.')) * float(item['square'])
-        else:
-            item['price'] = float(item['price'].split(' ')[0].strip())
-
         if item['direction'] == '_':
-            item['direction'] = 'UNKNOW'
-        if item['dinningRoom'] == '---':
-            item['dinningRoom'] = 0
-        else:
+            item['direction'] = '---'
+
+        if item['dinningRoom'] != '---':
             item['dinningRoom'] = 1
 
-        if item['kitchen'] == '---':
-            item['kitchen'] = 0
-        else:
+        if item['kitchen'] != '---':
             item['kitchen'] = 1
 
-        if item['rooftop'] == '---':
-            item['rooftop'] = 0
-        else:
+        if item['rooftop'] != '---':
             item['rooftop'] = 1
 
-        if item['garage'] == '---':
-            item['garage'] = 0
-        else:
+        if item['garage'] != '---':
             item['garage'] = 1
 
-        if item['proprietor'] == '---':
-            item['proprietor'] = 0
-        else:
+        if item['proprietor'] != '---':
             item['proprietor'] = 1
-
-        if item['legally'] == '---':
-            item['legally'] = 'UNKNOW'
 
         self.db[self.collection_name].insert_one(ItemAdapter(item).asdict())
 

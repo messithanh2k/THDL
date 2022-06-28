@@ -35,18 +35,8 @@ class BatdongsanVnPipeline:
 
     def process_item(self, item, spider):
         # print(item['image'])
-        if (item['square'] != 'UNKNOW' and item['square'] != ''):
-            item['square'] = float(
-                item['square'].replace('m', '').replace(',', '.'))
-
-        if ('tỷ' in item['price'].lower()):
-            item['price'] = float(item['price'].split(
-                ' ')[0].strip().replace(',', '.')) * 1000
-        elif 'triệu/m' in item['price'].lower():
-            item['price'] = float(item['price'].split(
-                ' ')[0].strip()) * float(item['square'])
-        else:
-            item['price'] = float(item['price'].split(' ')[0].strip())
+        for field in item.fields:
+            item.setdefault(field, '---')
 
         self.db[self.collection_name].insert_one(ItemAdapter(item).asdict())
 

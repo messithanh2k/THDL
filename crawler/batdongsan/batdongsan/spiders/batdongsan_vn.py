@@ -64,7 +64,7 @@ class BatdongsanVnSpider(scrapy.Spider):
         description = ' '.join(description)
         item_loader.add_value('description', description)
 
-        legally = 'UNKNOW'
+        legally = '---'
         if (description.lower().strip().find('sổ hồng') >= 0):
             legally = 'sổ đỏ/sổ hồng'
         if (description.lower().strip().find('sổ đỏ') >= 0):

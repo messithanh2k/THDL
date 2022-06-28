@@ -150,7 +150,7 @@ class IBatdongsanComSpider(scrapy.Spider):
         author = response.css(
             'div.contact-info > div.content > div.name::text').get()
         item_loader.add_value('seller', author)
-        email = 'UNKNOW'
+        email = '---'
         item_loader.add_value('email', email)
         phone = response.css(
             'div.contact-info > div.content > div.fone >a').attrib['href']
