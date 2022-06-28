@@ -10,7 +10,8 @@ from scrapy.http import HtmlResponse
 class AlonhadatComVnSpider(scrapy.Spider):
     name = 'alonhadat_com_vn'
     allowed_domains = ['alonhadat.com.vn']
-    start_urls = ['https://alonhadat.com.vn/nha-dat/can-ban.html']
+    start_urls = [
+        'https://alonhadat.com.vn/nha-dat/can-ban/nha-dat/1/ha-noi.html']
 
     custom_settings = {
         'CLOSESPIDER_ITEMCOUNT': 300,
