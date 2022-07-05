@@ -36,6 +36,18 @@ def item_detail_get():
     except Exception as ex:
         print(ex)
         return render_template("404.html")
+
+@app.route('/near_by', methods=["POST"])
+def near_by_items_post():
+    ward = request.form.get('ward', "")
+    district = request.form.get("district", "")
+    province = request.form.get("province", "")
+    type = request.form.get("type", "")
+    status, message, data = get_near_by_properties(client=ITEM_CLIENT, ward=ward, district=district, province=province, type=type)
+    if data is None:
+        data = []
+    return {"status": status, "message": message, "data": data}
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

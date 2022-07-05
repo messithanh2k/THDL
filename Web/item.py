@@ -193,46 +193,6 @@ def get_items_by_ids(client: MongoClient, list_ids):
         print("Exception in get items by ids", ex)
         return []
 
-def get_recommend_properties(user_client: MongoClient, item_client: MongoClient, userId, limit=15):
-    try:
-        db = user_client.get_database("UserDatabase")
-        collection = db.get_collection("Preference")
-        preference_obj = collection.find_one(filter={"userId": userId})
-        if preference_obj is None:
-            return get_random_properties(client=item_client, limit=limit)
-        else:
-            preference = preference_obj["preference"]
-            filter = {}
-            filter["property_ward"] = {"$in": preference["property_ward"]}
-            filter["property_district"] = {"$in": preference["property_district"]}
-            filter["property_type"] = {"$in": preference["property_type"]}
-            filter["property_price"] = {"$gt": preference["min_price"], "$lt": preference["max_price"]}
-            filter["property_area"] = {"$gt": preference["min_area"], "$lt": preference["max_area"]}
-            list_ids = get_list_ids(client=item_client, filter=filter)
-            if len(list_ids) < 50:
-                filter.pop("property_ward")
-                list_ids = list_ids + get_list_ids(client=item_client, filter=filter)
-            if len(list_ids) < limit:
-                random.shuffle(list_ids)
-                list_ids = list_ids[:limit]
-                data = get_items_by_ids(client=item_client, list_ids=list_ids)
-                append_size = limit - len(data)
-                status, message, append_data = get_random_properties(client=item_client, limit=append_size)
-                if status is False:
-                    return status, message, append_data
-                else:
-                    data = data + append_data
-                    random.shuffle(data)
-                    return True, "Lấy thông tin thành công", data
-            else:
-                random.shuffle(list_ids)
-                list_ids = list_ids[:limit]
-                data = get_items_by_ids(client=item_client, list_ids=list_ids)
-                random.shuffle(data)
-                return True, "Lấy thông tin thành công", data
-    except:
-        return False, "Lỗi database server. Truy vấn thất bại", None
-
 def save_file_to_local(file_obj : FileStorage):
     try:
         new_file_name = str(uuid.uuid4()) + file_obj.filename

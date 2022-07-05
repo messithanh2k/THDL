@@ -1,21 +1,3 @@
-function fetch_recommend_items_data(user_id, callback_func) {
-    return $.ajax('/get_recommend',
-                {
-                    method: 'post',
-                    dataType: 'json',
-                    data: {'userId': user_id},
-                    timeout: 60000,
-                    success: function (data,status,xhr) {
-                        callback_func(data);
-                    },
-                    error: function (jqXhr, textStatus, errorMessage) {
-                        data = {"status": false, "message": "Kết nối server thất bại", data: []};
-                        callback_func(data);
-                    }
-                }
-            );
-}
-
 function fetch_items_data(limit, offset, sort, filter, callback_func) {
     let data = {
                 "limit": limit,
