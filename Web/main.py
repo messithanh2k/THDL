@@ -61,7 +61,39 @@ def find_items_post():
     if status == False:
         data = []
     return {"status": status, "message": message, "data": data}
-    
+
+@app.route('/statistic', methods=["GET"])
+def statistic_post():
+    is_post = request.args.get("post")
+    if is_post == "true":
+        is_post = True
+    else:
+        is_post = False
+    return render_template("statistic.html", is_post=is_post)
+
+@app.route('/get_statistic', methods=["POST"])
+def get_statistic_post():
+    district = request.form.get("district")
+    ward = request.form.get("ward")
+    pro_type = request.form.get("type")
+    is_post = request.form.get("post")
+    day = int(request.form.get("day"))
+    area_type = request.form.get("area-type")
+    price_type = request.form.get("price-type")
+    if is_post == "true":
+        is_post = True
+    else:
+        is_post = False
+    status, message, data = get_statistic_data(STATISTICAL_CLIENT=STATISTICAL_CLIENT, prop_type=pro_type,
+                              district=district, ward=ward, is_post=is_post, day=day,
+                                               area_type=area_type, price_type=price_type)
+    return {"status": status, "message": message, "data": data}
+
+@app.route('/get_sub_type', methods=["POST"])
+def get_sub_type_post():
+    pro_type = request.form.get("type")
+    return {"area_type": AREA_TYPE_MAPPING[pro_type], "price_type": PRICE_TYPE_MAPPING[pro_type]}
+
 if __name__ == '__main__':
     app.run(debug=True)
 
