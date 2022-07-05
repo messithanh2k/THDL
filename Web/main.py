@@ -48,6 +48,20 @@ def near_by_items_post():
         data = []
     return {"status": status, "message": message, "data": data}
     
+@app.route('/find_items', methods=["POST"])
+def find_items_post():
+    query = request.form.get("query", "{}")
+    query = json.loads(query)
+    limit = query.get('limit', 15)
+    offset = query.get("offset", 0)
+    filter = query.get("filter", {})
+    sort = query.get("sort", {"property_linux": -1})
+    status, message, data = find_properties(client=ITEM_CLIENT, filter=filter,
+                                            sort=sort, offset=offset, limit=limit)
+    if status == False:
+        data = []
+    return {"status": status, "message": message, "data": data}
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

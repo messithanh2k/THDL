@@ -7,38 +7,7 @@ from pydrive.drive import GoogleDrive
 from werkzeug.datastructures import FileStorage
 
 def find_properties(client : MongoClient, filter = {}, sort = {"property_linux": -1}, offset = 0, limit=15):
-    # try:
-    #     sort_list = []
-    #     search = False
-
-    #     if "property_search" in filter:
-    #         query_str = filter["property_search"]
-    #         filter["$text"] = {"$search": query_str}
-    #         filter.pop('property_search', None)
-    #         sort_list.append(('score', {'$meta': 'textScore'}))
-    #         search = True
-
-    #     db = client.get_database("PropertiesDatabase")
-    #     collection = db.get_collection("MediatedCleanData")
-
-    #     for key in sort:
-    #         sort_list.append((key, sort[key]))
-
-    #     if search:
-    #         data = collection.find(filter, {'score': {'$meta': 'textScore'},}).sort(sort_list).skip(skip=offset).limit(limit=limit)
-    #     else:
-    #         data = collection.find(filter = filter).sort(sort_list).skip(skip=offset).limit(limit=limit)
-
-    #     data = list(data)
-    #     if len(data)>0:
-    #         for x in data:
-    #             x["_id"] = str(x["_id"])
-    #         return True, "Lấy dữ liệu thành công", data
-    #     else:
-    #         return False, "Không có dữ liệu tin bài", []
-    # except Exception as ex:
-    #     print("Exception in find items from database", ex)
-    #     return False, "Lỗi database server. Lấy dữ liệu thất bại", None
+    
     try:
         sort_list = []
         search = False
@@ -221,36 +190,3 @@ def save_file_to_drive(drive : GoogleDrive, targetimagesavedir, file_obj : FileS
     finally:
         os.remove(local_save_path)
 
-def add_new_property(drive: GoogleDrive, targetimagesavedir,
-                     client: MongoClient, user_id,
-                     title, detail, district, ward, street, prop_type,
-                     price, area, images):
-    if title=="" or detail=="" or district=="" or ward=="" or street=="" or prop_type=="" or price<=0 or area<=0 or len(images)==0:
-        return False, "Thông tin cung cấp không đầy đủ"
-    address = street + ", " + ward + ", " + district + ", Hà Nội"
-    property_images = []
-    for image in images:
-        x = save_file_to_drive(drive=drive, targetimagesavedir=targetimagesavedir, file_obj=image)
-        if x is not None:
-            property_images.append(x)
-    data = {"property_title": title,
-            "property_detail": detail,
-            "property_ward": ward,
-            "property_district": district,
-            "property_province": "Thành phố Hà Nội",
-            "property_type": prop_type,
-            "property_price": price,
-            "property_area": area,
-            "property_address": address,
-            "property_date": get_current_time_short_str(),
-            "property_link": "USER"+user_id,
-            "property_images": property_images,
-            "property_linux": get_current_timestamp(),
-            "property_search": detail+". "+address}
-    try:
-        db = client.get_database("UserDatabase")
-        collection = db.get_collection("UserPost")
-        collection.insert_one({"userId": user_id, "post": data})
-        return True, "Tạo bài thành công"
-    except:
-        return False, "Lỗi database server, tạo bài thất bại"
