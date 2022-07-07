@@ -15,7 +15,9 @@ formater = Format()
 app = Flask(__name__)
 app.secret_key = 'BATDONGSANHANOI'
 
-ITEM_CLIENT = MongoClient('mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/?retryWrites=true&w=majority')
+# ITEM_CLIENT = MongoClient('mongodb+srv://chimeyrock999:admin123@congthongtinbatdongsan.19hdj.mongodb.net/?retryWrites=true&w=majority')
+ITEM_CLIENT = MongoClient("mongodb+srv://messithanh2k:messithanh2k@qlht.kpuwx.mongodb.net/?retryWrites=true&w=majority")
+STATISTICAL_CLIENT =  MongoClient("mongodb+srv://messithanh2k:messithanh2k@qlht.kpuwx.mongodb.net/?retryWrites=true&w=majority")
 
 @app.route('/', methods=["GET"])
 def home():
@@ -25,7 +27,6 @@ def home():
 @app.route('/item_detail', methods=["GET"])
 def item_detail_get():
     id = request.args.get("id")
-    print(id)
     try:
         id = ObjectId(id)
         status, message, item = get_property(client=ITEM_CLIENT, id=id)
