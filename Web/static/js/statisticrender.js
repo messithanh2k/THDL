@@ -138,18 +138,46 @@ function update_filter() {
     price_type = $("#price-type").find(":selected").text();
 }
 
+function plot_num_items_and_price_avg_region(
+    add_col,
+    add_name,
+    num_idx_ele,
+    price_idx_ele
+) {
+    let sub_df = compute_num_items_and_price_avg([add_col]);
+    sub_df.addColumn({
+        column: " ",
+        values: sub_df.column(add_col),
+        inplace: true,
+    });
+
+    sub_df.sort_values({ by: `Số ${LABEL}`, inplace: true, ascending: false });
+    $(`#plot_${num_idx_ele}_title`).html(
+        `Số lượng ${LABEL} trên từng ` + add_name
+    );
+    sub_df
+        .plot(`plot_${num_idx_ele}`)
+        .bar({ x: " ", y: `Số ${LABEL}`, displayModeBar: false });
+
+    sub_df.sort_values({ by: "Giá TB (/m2)", inplace: true, ascending: false });
+    $(`#plot_${price_idx_ele}_title`).html(
+        "Giá trung bình với mỗi m2 trên từng " + add_name
+    );
+    sub_df
+        .plot(`plot_${price_idx_ele}`)
+        .bar({ x: " ", y: "Giá TB (/m2)", displayModeBar: false });
+}
+
 function compute_num_items_and_price_avg(group_col, keep_min_price = false) {
     let g_len = group_col.length;
     let sub_df = undefined;
     if (keep_min_price) {
-        sub_df = df
-            .groupby(group_col)
-            .agg({
-                sum_area: "sum",
-                sum_price: "sum",
-                count: "sum",
-                property_min_price: "mean",
-            });
+        sub_df = df.groupby(group_col).agg({
+            sum_area: "sum",
+            sum_price: "sum",
+            count: "sum",
+            property_min_price: "mean",
+        });
     } else {
         sub_df = df
             .groupby(group_col)
@@ -240,59 +268,6 @@ function plot_num_items_and_price_area_sub_type(num_idx_ele, price_idx_ele) {
     sub_df
         .plot(`plot_${price_idx_ele}`)
         .line({ x: " ", y: "Giá TB (/m2)", displayModeBar: false });
-}
-
-function render_statistical_data(data) {
-    if (data["status"] == false) {
-        $("#message").html(
-            "<h3>Không có dữ liệu ứng với khu vực bạn yêu cầu</h3>"
-        );
-    } else {
-        $("#message").html("<h3>Lấy dữ liệu thành công</h3>");
-        data = data["data"];
-        df = new dfd.DataFrame(data);
-        let element_idx = 1;
-        if (district == "Quận/huyện") {
-            plot_num_items_and_price_avg_region(
-                "property_district",
-                "quận/huyện",
-                element_idx,
-                element_idx + 1
-            );
-            element_idx = element_idx + 2;
-        } else {
-            if (ward == "Phường/xã") {
-                plot_num_items_and_price_avg_region(
-                    "property_ward",
-                    "phường/xã",
-                    element_idx,
-                    element_idx + 1
-                );
-                element_idx = element_idx + 2;
-            }
-        }
-        if (prop_type == "Tất cả loại hình") {
-            plot_num_items_and_price_avg_type(element_idx, element_idx + 1);
-            element_idx = element_idx + 2;
-        } else {
-            if (area_type == "Phân khúc diện tích") {
-                plot_num_items_and_price_area_sub_type(
-                    element_idx,
-                    element_idx + 1
-                );
-                element_idx = element_idx + 2;
-            }
-            if (price_type == "Phân khúc giá cả") {
-                plot_num_items_and_price_price_sub_type(
-                    element_idx,
-                    element_idx + 1
-                );
-                element_idx = element_idx + 2;
-            }
-        }
-        plot_num_items_and_price_avg_time(element_idx, element_idx + 1);
-        element_idx = element_idx + 2;
-    }
 }
 
 $("#apply-filter").on("click", function (event) {
