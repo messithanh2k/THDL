@@ -4,3 +4,4 @@ lib64
 include
 
 crawler/test1
+pyvenv.cfg
