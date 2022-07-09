@@ -2,6 +2,6 @@ bin
 lib
 lib64
 include
-
+Scripts
 crawler/test1
 pyvenv.cfg

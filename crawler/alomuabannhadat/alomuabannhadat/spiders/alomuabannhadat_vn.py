@@ -86,14 +86,9 @@ class AlomuabannhadatVnSpider(scrapy.Spider):
             item = item.replace('</dt>', '')
             value = values[i].replace('<dd>', '').replace('</dd>', '')
 
-            if (item == 'Mã tài sản:'):
-                id = value.strip()
-                # print(id)
-                item_loader.add_value('id', id)
-
             if (item == 'Vị trí:'):
-                address = value.strip()
-                item_loader.add_value('address', address)
+                location = value.strip()
+                item_loader.add_value('location', location)
 
             if (item == 'Pháp lý:'):
                 legally = value.strip()

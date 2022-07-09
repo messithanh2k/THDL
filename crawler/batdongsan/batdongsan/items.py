@@ -11,15 +11,13 @@ class BatdongsanVnItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     url = Field()
-    id = Field()
     title = Field()
     postedTime = Field()
-    description = Field()
+    content = Field()
 
     type = Field()
     square = Field()
     price = Field()
-    legally = Field()
 
     address = Field()
     city = Field()
@@ -27,7 +25,6 @@ class BatdongsanVnItem(scrapy.Item):
 
     numOfBedrooms = Field()  # optional
     numOfToilets = Field()  # optional
-    numOfFloors = Field()  # optional
     direction = Field()  # optional
     balconyDirection = Field()  # optional
 

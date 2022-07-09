@@ -60,16 +60,9 @@ class BatdongsanVnSpider(scrapy.Spider):
         item_loader.add_value('title', title.strip())
         time = response.css('time.timeago').attrib['datetime']
         item_loader.add_value('postedTime', time)
-        description = response.css('.body .content ::text').getall()
-        description = ' '.join(description)
-        item_loader.add_value('description', description)
-
-        legally = '---'
-        if (description.lower().strip().find('sổ hồng') >= 0):
-            legally = 'sổ đỏ/sổ hồng'
-        if (description.lower().strip().find('sổ đỏ') >= 0):
-            legally = 'sổ đỏ/sổ hồng'
-        item_loader.add_value('legally', legally)
+        content = response.css('.body .content ::text').getall()
+        content = ' '.join(content)
+        item_loader.add_value('content', content)
 
         price = response.css("strong.price::text").getall()
         item_loader.add_value('price', ' '.join(price).strip())
@@ -79,9 +72,6 @@ class BatdongsanVnSpider(scrapy.Spider):
             converted_item = HtmlResponse(
                 url=item, body=item, encoding='utf-8')
             key = converted_item.css('strong::text').get()
-            if (key == 'Mã tin:'):
-                id = converted_item.css('li>span::text').get()
-                item_loader.add_value('id', id)
 
             value = converted_item.css('li::text').get()
             if (key == 'Diện tích:'):

@@ -10,10 +10,9 @@ class AlonhadatComVnItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     url = Field()
-    id = Field()
     title = Field()
     postedTime = Field()
-    description = Field()
+    detail = Field()
     type = Field()
     square = Field()
     price = Field()
@@ -36,12 +35,10 @@ class AlonhadatComVnItem(Item):
     proprietor = Field()
 
     numOfBedrooms = Field()  # optional
-    numOfToilets = Field()  # optional
     numOfFloors = Field()  # optional
     direction = Field()  # optional
     rooftop = Field()  # optional
 
     seller = Field()
-    email = Field()
     phone = Field()
     image = Field()

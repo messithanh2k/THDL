@@ -92,10 +92,6 @@ class AlonhadatComVnSpider(scrapy.Spider):
             item = prarams[i]
             item = item.replace('<td>', '')
             item = item.replace('</td>', '')
-            if (item == 'Mã tin'):
-                id = prarams[i +
-                             1].replace('<td>', '').replace('</td>', '').strip()
-                item_loader.add_value('id', id.strip())
 
             if (item == 'Hướng'):
                 direction = prarams[i +
@@ -147,7 +143,7 @@ class AlonhadatComVnSpider(scrapy.Spider):
             if (item == 'Số phòng ngủ'):
                 numOfBedrooms = prarams[i +
                                         1].replace('<td>', '').replace('</td>', '').strip()
-                item_loader.add_value('width', numOfBedrooms)
+                item_loader.add_value('numOfBedrooms', numOfBedrooms)
             if (item == 'Chính chủ'):
                 proprietor = prarams[i +
                                      1].replace('<td>', '').replace('</td>', '').strip()
@@ -156,8 +152,6 @@ class AlonhadatComVnSpider(scrapy.Spider):
         author = response.css(
             'div.contact-info > div.content > div.name::text').get()
         item_loader.add_value('seller', author)
-        email = '---'
-        item_loader.add_value('email', email)
 
         breadcrumb = response.css('div.top-link>span>a>span::text').getall()
 
@@ -166,12 +160,12 @@ class AlonhadatComVnSpider(scrapy.Spider):
 
         district = breadcrumb[4].replace(breadcrumb[2], '').strip()
         item_loader.add_value('district', district)
-        description = ''
+        detail = ''
         ptag = response.css('div.detail span::text').getall()
         if len(ptag) > 0:
             # print(ptag)
             for i in ptag:
-                description = description+"\n"+i
+                detail = detail+"\n"+i
                 images = response.css(
                     'div.detail img').xpath('@src').getall()
         else:
@@ -179,13 +173,13 @@ class AlonhadatComVnSpider(scrapy.Spider):
             if len(ptag) > 0:
                 # print(ptag)
                 for i in ptag:
-                    description = description+"\n"+i
+                    detail = detail+"\n"+i
                     images = response.css(
                         'div.detail img').xpath('@src').getall()
             else:
-                description = response.css('div.detail::text').getall()
+                detail = response.css('div.detail::text').getall()
 
-                # print(description)
+                # print(detail)
                 images = response.css(
                     'div.image-list >span>img').xpath('@src').getall()
                 # print(images)
@@ -195,7 +189,7 @@ class AlonhadatComVnSpider(scrapy.Spider):
                 'div.imageview img').xpath('@src').getall()
             # print(images)
 
-        item_loader.add_value('description', description)
+        item_loader.add_value('detail', detail)
         image = []
         for item in images:
             image.append('https://alonhadat.com.vn/' + item)
