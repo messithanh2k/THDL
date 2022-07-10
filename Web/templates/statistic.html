@@ -45,6 +45,225 @@
 
 </head>
 <body>
+
+    {% include 'header.html' %}
+    {% include 'menu.html' %}
+    
+    <!-- Start Proerty header  -->
+    
+    <section id="aa-property-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="aa-property-header-inner">
+                        <h2>THỐNG KÊ</h2>
+                        <ol class="breadcrumb">
+                            <li><a href="/">Trang chủ</a></li>
+                            {% if is_post %}
+                            <li class="active">Thống kê tin bài</li>
+                            {% else %}
+                            <li class="active">Thống kê lượt xem</li>
+                            {% endif %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="sumup-property" style="height: 1000px;" hidden>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="aa-property-header-inner">
+                        {% if is_post %}
+                        <h2 style="padding-top: 30px;">TỔNG QUAN TIN BÀI ĐĂNG</h2>
+                        {% else %}
+                        <h2 style="padding-top: 30px;">TỔNG QUAN LƯỢT XEM TIN BÀI</h2>
+                        {% endif %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <hr>
+    <!-- Start post statistic  -->
+    <section id="aa-post-statistic">
+        <div class="container">
+            <div id="aa-advance-search">
+                <div class="aa-advance-search-area">
+                    <div class="form">
+                        <div class="aa-advance-search-top" style="margin-top: 20px;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="day-fetch" name="type">
+                                            <option selected value="20">Số ngày phân tích</option>
+                                            <option value="10">10 ngày gần đây</option>
+                                            <option value="20">20 ngày gần đây</option>
+                                            <option value="30">1 tháng gần đây</option>
+                                            <option value="60">2 tháng gần đây</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="type-select" name="type">
+                                            <option selected value="-1">Tất cả loại hình</option>
+                                            <option value="0">nhà mặt tiền</option>
+                                            <option value="1">nhà trong hẻm</option>
+                                            <option value="2">căn hộ chung cư</option>
+                                            <option value="3">đất nền</option>
+                                            <option value="4">biệt thự</option>
+                                            <option value="5">khách sạn, cửa hàng</option>
+                                            <option value="6">phòng trọ, nhà trọ</option>
+                                            <option value="7">văn phòng</option>
+                                            <option value="8">loại hình khác</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="area-type" name="type">
+                                            <option selected value="-1">Phân khúc diện tích</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="price-type" name="type">
+                                            <option selected value="-1">Phân khúc giá cả</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="aa-advance-search-top" style="margin-top: 30px;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="province-select" name="district">
+                                            <option selected value="-1" disabled>Thành phố Hà Nội</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="district-select" name="district">
+                                            <option selected value="-1">Quận/huyện</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <select id="ward-select" name="ward">
+                                            <option value="-1" selected>Phường/xã</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="aa-single-advance-search">
+                                        <button id="apply-filter" class="aa-search-btn">Hiển thị</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <center style="padding-top: 30px;">
+            <h2>THỊ TRƯỜNG KHU VỰC</h2>
+            {% if is_post %}
+            <h4 style="max-width: 50%;">Nhanh chóng khảo sát nguồn cung của thị trường bất động sản mà bạn đang quan tâm
+                bằng cách lựa chọn các mục thông tin bên dưới</h4>
+            {% else %}
+            <h4 style="max-width: 50%;">Nhanh chóng khảo sát nhu cầu của thị trường bất động sản mà bạn đang quan tâm
+                bằng cách lựa chọn các mục thông tin bên dưới</h4>
+            {% endif %}
+        </center>
+    
+        <div class="container">
+            <div id="statistic-response">
+    
+            </div>
+        </div>
+    </section>
+    <!-- / Post statistic  -->
+    
+    <!-- Start read statistic  -->
+    <section style="margin-top: 50px;" id="aa-read-statistic">
+        <div id="message" style="text-align: center;"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_1"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_1_title"></h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_2"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_2_title"></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_3"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_3_title"></h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_4"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_4_title"></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_5"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_5_title"></h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_6"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_6_title"></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_7"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_7_title"></h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="height: 450px; width: 100%" id="plot_8"></div>
+                    <div style="text-align: center;">
+                        <h4 id="plot_8_title"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- / read statistic  -->
+    
+    <section>
+        <div style="height: 200px;"></div>
+    </section>
+    {% include 'footer.html' %}
+
     <!-- jQuery library -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
     <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
