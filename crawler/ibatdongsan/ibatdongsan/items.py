@@ -9,10 +9,9 @@ from scrapy.item import Item, Field
 
 class IbatdongsanComItem(scrapy.Item):
     url = Field()
-    id = Field()
     title = Field()
     postedTime = Field()
-    description = Field()
+    detail = Field()
     type = Field()
     square = Field()
     price = Field()
@@ -35,12 +34,10 @@ class IbatdongsanComItem(scrapy.Item):
     proprietor = Field()
 
     numOfBedrooms = Field()  # optional
-    numOfToilets = Field()  # optional
     numOfFloors = Field()  # optional
     direction = Field()  # optional
     rooftop = Field()  # optional
 
     seller = Field()
-    email = Field()
     phone = Field()
     image = Field()

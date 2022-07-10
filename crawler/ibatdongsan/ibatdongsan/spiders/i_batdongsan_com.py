@@ -86,11 +86,6 @@ class IBatdongsanComSpider(scrapy.Spider):
                                  1].split('<sup>')[0].replace('<td>', '').replace('"', '').strip()
                 # print(square)
                 item_loader.add_value('square', square.strip())
-            if (item == 'Mã tin'):
-                id = prarams[i +
-                             1].replace('<td>', '').replace('</td>', '').strip()
-                # print(direction)
-                item_loader.add_value('id', id.strip())
             if (item == 'Hướng'):
                 direction = prarams[i +
                                     1].replace('<td>', '').replace('</td>', '').strip()
@@ -141,7 +136,7 @@ class IBatdongsanComSpider(scrapy.Spider):
             if (item == 'Số phòng ngủ'):
                 numOfBedrooms = prarams[i +
                                         1].replace('<td>', '').replace('</td>', '').strip()
-                item_loader.add_value('width', numOfBedrooms)
+                item_loader.add_value('numOfBedrooms', numOfBedrooms)
             if (item == 'Chính chủ'):
                 proprietor = prarams[i +
                                      1].replace('<td>', '').replace('</td>', '').strip()
@@ -150,8 +145,6 @@ class IBatdongsanComSpider(scrapy.Spider):
         author = response.css(
             'div.contact-info > div.content > div.name::text').get()
         item_loader.add_value('seller', author)
-        email = '---'
-        item_loader.add_value('email', email)
         phone = response.css(
             'div.contact-info > div.content > div.fone >a').attrib['href']
         item_loader.add_value('phone', phone.replace('tel:', ''))
@@ -163,9 +156,8 @@ class IBatdongsanComSpider(scrapy.Spider):
 
         district = breadcrumb[4].replace(breadcrumb[2], '').strip()
         item_loader.add_value('district', district)
-        description = response.css('div.detail::text').getall()
+        detail = response.css('div.detail::text').getall()
 
-        # print(description)
         images = response.css(
             'div.image-list >ul>li>img').xpath('@src').getall()
         # print(images)
@@ -175,7 +167,7 @@ class IBatdongsanComSpider(scrapy.Spider):
                 'div.imageview img').xpath('@src').getall()
             # print(images)
 
-        item_loader.add_value('description', description)
+        item_loader.add_value('detail', detail)
         image = []
         for item in images:
             image.append('http://i-batdongsan.com/' + item)

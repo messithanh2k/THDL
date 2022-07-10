@@ -7,7 +7,6 @@ from pydrive.drive import GoogleDrive
 from werkzeug.datastructures import FileStorage
 
 def find_properties(client : MongoClient, filter = {}, sort = {"property_linux": -1}, offset = 0, limit=15):
-    
     try:
         sort_list = []
         search = False
@@ -20,7 +19,7 @@ def find_properties(client : MongoClient, filter = {}, sort = {"property_linux":
             search = True
 
         db = client.get_database("PropertiesDatabase")
-        collection = db.get_collection("MediatedCleanDataDuplicate")
+        collection = db.get_collection("MediatedCleanData")
 
         for key in sort:
             sort_list.append((key, sort[key]))
@@ -34,14 +33,6 @@ def find_properties(client : MongoClient, filter = {}, sort = {"property_linux":
         if len(data)>0:
             for x in data:
                 x["_id"] = str(x["_id"])
-                x["property_type"] = x["type"]
-                x["property_address"] = x["address"]
-                x["property_area"] = x["square"]
-                x["property_price"] = x["price"]
-                x["property_title"] = x["title"]
-                x["property_detail"] = x["description"]
-                x["property_images"] = x["image"]
-
             return True, "Lấy dữ liệu thành công", data
         else:
             return False, "Không có dữ liệu tin bài", []
@@ -52,17 +43,12 @@ def find_properties(client : MongoClient, filter = {}, sort = {"property_linux":
 def get_random_properties(client: MongoClient, limit=6):
     try:
         db = client.get_database("PropertiesDatabase")
-        collection = db.get_collection("MediatedCleanDataDuplicate")
+        collection = db.get_collection("MediatedCleanData")
         data = collection.aggregate([{"$sample": {'size': limit}}, ])
         data = list(data)
         if len(data)>0:            
             for x in data:
                 x["_id"] = str(x["_id"])
-                x["property_type"] = x["type"]
-                x["property_address"] = x["address"]
-                x["property_area"] = x["square"]
-                x["property_price"] = x["price"]
-                x["property_title"] = x["title"]
             return True, "Lấy dữ liệu thành công", data
         else:
             return False, "Không có dữ liệu tin bài", []
@@ -86,22 +72,10 @@ def count_properties(client : MongoClient, filter = {}):
 def get_property(client: MongoClient, id):
     try:
         db = client.get_database("PropertiesDatabase")
-        collection = db.get_collection("MediatedCleanDataDuplicate")
+        collection = db.get_collection("MediatedCleanData")
         data = collection.find_one(filter={"_id": id})
         if data:
             data["_id"] = str(data["_id"])
-            data["property_type"] = data["type"]
-            data["property_address"] = data["address"]
-            data["property_area"] = data["square"]
-            data["property_price"] = data["price"]
-            data["property_title"] = data["title"]
-            data["property_detail"] = data["description"]
-            data["property_images"] = data["image"]
-            data["property_date"] = data["postedTime"]
-            data["property_ward"] = data["ward"]
-            data["property_district"] = data["district"]
-            data["property_province"] = data["city"]
-
             return True, "Tìm kiếm thành công", data
         else:
             return False, "ID bị sai", None
